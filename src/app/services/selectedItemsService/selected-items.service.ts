@@ -10,5 +10,11 @@ export class SelectedItemsService {
   addSelectedItem(selectedItems){
     this.selectedItems = selectedItems;
   }
+  getSelectedItems(){
+    return this.selectedItems;
+  }
+  removeItem(selectedItems){
+    this.selectedItems = selectedItems;
+  }
 
 }

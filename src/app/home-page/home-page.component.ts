@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {MobileService} from '../mobile.service';
-import {SelectedItemsService} from '../selected-items.service'
+import {MobileService} from '../services/mobileService/mobile.service';
+import {SelectedItemsService} from '../services/selectedItemsService/selected-items.service'
 import { isNumber } from 'util';
 @Component({
   selector: 'app-home-page',
@@ -14,7 +14,6 @@ export class HomePageComponent implements OnInit {
   allItemsCount:number = 0;
   showModal =false;
   cartData: Array<{id:null,name: string, price: number,number:0}> = []; 
-  totalCost:number=0;
   ngOnInit() {
     this.mobileData = this.mobileService.getMobileData();
   }
@@ -26,17 +25,16 @@ export class HomePageComponent implements OnInit {
   }
   showCart(){
     this.showModal= true;
-    this.cartData.forEach(element => {
-      this.totalCost += parseInt(element.price, 10);
-    });
     this.selectedItemsService.addSelectedItem(this.cartData);
   }
-  removeItem(item){
-    console.log(item);
-    this.cartData.splice(item.id,1);
-    this.cartData = this.cartData.filter(obj => obj !== item);
-    this.allItemsCount -= item.numberOfMobiles;
-    this.totalCost -= item.price;
+  message:string;
+  receiveMessage($event) {
+    this.message = $event;
+    this.showModal = false;
+    this.cartData = this.selectedItemsService.getSelectedItems();
+    this.allItemsCount = 0;
+    this.cartData.forEach(element => {
+      this.allItemsCount += element.numberOfMobiles;
+    });
   }
-
 }

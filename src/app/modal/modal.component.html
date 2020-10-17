@@ -1,0 +1,34 @@
+<div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cart</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="ShowModal=false">
+                    <span aria-hidden="true" (click)="sendMessage()">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div *ngFor="let item of cartData">
+                    <hr>
+                    <div class="row">
+                        <div class="col-4">
+                            {{item.name}}
+                        </div>
+                        <div class="col-4">
+                            QTY
+                            <input class="w-50" [value]="item.numberOfMobiles">
+                        </div>
+                        <div class="col-4">
+                            ${{item.price}}
+                            <button (click)="removeItem(item)">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div>Total cost : {{totalCost}}</div>
+                <button (click)="sendMessage()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
