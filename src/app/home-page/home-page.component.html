@@ -1,0 +1,53 @@
+
+<div class="container">
+        <div *ngFor="let mobile of mobileData; let last = last" style="float:left">
+            <div class="card m-3">
+                <div class="text-right">
+                    <button *ngIf="last" (click)="showCart();ShowModal=true" class="btn-primary btn w-50">Cart {{allItemsCount}}</button>
+                </div>
+                <img class="card-img-top " [ngClass]="{'mt-3': last , 'mt-5' : !last}" [src]="mobile.imgSrc">
+                <div class="card-body text-center">
+                    <h6 class="card-title text-center">{{mobile.name}}</h6>
+                    <span class="card-text text-center mb-2">${{mobile.price}}</span>
+                    <input id="{{mobile.name}}" value='1' min="1" class="form-control mb-2">
+                    <button (click)="addToChart(mobile.name,mobile.price,mobile.id)" class="btn btn-primary">Add to chart</button>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+      <!-- Modal -->
+      <div class="modal fade" [ngClass]="{'show':ShowModal}" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Cart</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="ShowModal=false">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div *ngFor="let item of cartData">
+                    <hr>
+                    <div class="row">
+                        <div class="col-4">
+                                {{item.name}}
+                        </div>
+                        <div class="col-4">
+                                QTY <input class="w-50" [value]="item.numberOfMobiles">
+                        </div>
+                        <div class="col-4">
+                                ${{item.price}}
+                                <button (click)="removeItem(item)">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                 <div>Total cost : {{totalCost}}</div>   
+                <button (click)="ShowModal=false" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>

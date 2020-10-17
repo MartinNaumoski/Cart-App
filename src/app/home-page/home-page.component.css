@@ -1,0 +1,25 @@
+img{
+    width: 13rem;
+}
+.card{
+    border: 0px solid black;
+    width: 13rem;
+}
+.card:hover{
+    box-shadow: 0 25px 35px black;
+    cursor: pointer;
+}
+html,
+body {
+    height: 100%;
+}
+.container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5rem;
+}
+.show{
+    display: block;
+}
