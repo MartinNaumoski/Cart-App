@@ -1,5 +1,7 @@
 import { Component, OnInit, Output,EventEmitter } from '@angular/core';
-import {SelectedItemsService} from '../services/selectedItemsService/selected-items.service'
+import { CartService} from '../services/cart-service/cart.service'
+import { Mobile } from 'src/app/interfaces/mobile.interface';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-modal',
@@ -7,29 +9,25 @@ import {SelectedItemsService} from '../services/selectedItemsService/selected-it
   styleUrls: ['./modal.component.css']
 })
 export class ModalComponent implements OnInit {
-  @Output() messageEvent = new EventEmitter<string>();
-  constructor(private selectedItemsService: SelectedItemsService) { }
-  cartData = [];
-  totalCost:number=0;
-  allItemsCount:number = 0;
+
+  selectedItems: Mobile[] = [];
+  totalCost: number;
+
+  constructor(private cartService: CartService,
+              private dialogRef: MatDialogRef<ModalComponent> ) { }
+
   ngOnInit() {
-    let localStorageData = localStorage.getItem('data');
-    this.cartData = this.selectedItemsService.getSelectedItems();
-    this.cartData = [ ... this.cartData, ...JSON.parse(localStorageData)];
-    this.cartData.forEach(element => {
-      this.totalCost += parseInt(element.price, 10);
-    });
+    this.selectedItems = this.cartService.getSelectedItems();
+    this.totalCost = this.cartService.getTotalCost();
   }
-  message: string = "Close dialog !";
-  sendMessage() {
-    this.messageEvent.emit(this.message)
-  }
+
   removeItem(item){ 
-    this.selectedItemsService.removeItem(this.cartData.filter(obj => obj !== item));
-    this.cartData = this.selectedItemsService.getSelectedItems();
-    localStorage.setItem('data',JSON.stringify(this.cartData));  
-    this.allItemsCount -= 1;
-    this.totalCost -= item.price;
+    this.cartService.removeItem(item);
+    this.selectedItems = this.cartService.getSelectedItems();
+    this.totalCost = this.cartService.getTotalCost();
+  }
+  closeModal(){
+    this.dialogRef.close();
   }
 
 

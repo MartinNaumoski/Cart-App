@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {MobileService} from '../services/mobileService/mobile.service';
-import {SelectedItemsService} from '../services/selectedItemsService/selected-items.service'
+import { MobileService } from '../services/mobile-service/mobile.service';
+import { CartService } from '../services/cart-service/cart.service'
 import { isNumber } from 'util';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalComponent } from 'src/app/modal/modal.component';
+import { Mobile } from 'src/app/interfaces/mobile.interface';
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
@@ -9,41 +12,28 @@ import { isNumber } from 'util';
 })
 export class HomePageComponent implements OnInit {
 
-  constructor(private mobileService: MobileService,private selectedItemsService: SelectedItemsService) { }
-  mobileData = [];
-  allItemsCount:number = 0;
-  showModal =false;
-  cartData: Array<{id:null,name: string, price: number,number:0}> = []; 
-  ngOnInit() {
-    if(localStorage.getItem('data') != null){
-      let localStorageData = localStorage.getItem('data');
-      localStorageData = JSON.parse(localStorageData)
-      localStorageData.forEach(element => {
-        this.allItemsCount += parseInt(element.numberOfMobiles, 10);
-      });
-    }
+  mobileData: Mobile[] = [];
+  allItemsCount: number;
 
+  constructor(private mobileService: MobileService,
+    private cartService: CartService,
+    private dialog: MatDialog) { }
+
+  ngOnInit() {
     this.mobileData = this.mobileService.getMobileData();
+    this.allItemsCount = this.cartService.getTotalNumberOfItems();
   }
-  addToChart(name,price,id){
-    let numberOfMobiles = (<HTMLInputElement>document.getElementById(name)).value;
-    numberOfMobiles = parseInt(numberOfMobiles, 10);
-    this.allItemsCount += numberOfMobiles; 
-    this.cartData.push({id,name,price,numberOfMobiles});
-    localStorage.setItem('data',JSON.stringify(this.cartData));  
+
+  addToCart(mobile: Mobile) {
+    let quantity = (<HTMLInputElement>document.getElementById(mobile.name)).value;
+    this.cartService.addSelectedItem(mobile, parseInt(quantity));
+    this.allItemsCount = this.cartService.getTotalNumberOfItems();
   }
-  showCart(){
-    this.showModal= true;
-    this.selectedItemsService.addSelectedItem(this.cartData);
+
+  showCart() {
+    this.dialog.open(ModalComponent).afterClosed().subscribe(() => {
+        this.allItemsCount = this.cartService.getTotalNumberOfItems();
+      });
   }
-  message:string;
-  receiveMessage($event) {
-    this.message = $event;
-    this.showModal = false;
-    this.cartData = this.selectedItemsService.getSelectedItems();
-    this.allItemsCount = 0;
-    this.cartData.forEach(element => {
-      this.allItemsCount += element.numberOfMobiles;
-    });
-  }
+
 }
