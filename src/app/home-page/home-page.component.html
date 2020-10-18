@@ -1,19 +1,18 @@
-
-<div class="container">
-        <div *ngFor="let mobile of mobileData; let last = last" style="float:left">
-            <div class="card m-3">
-                <div class="text-right">
-                    <button *ngIf="last" (click)="showCart();showModal=true" class="btn-primary btn w-50">Cart {{allItemsCount}}</button>
-                </div>
-                <img class="card-img-top " [ngClass]="{'mt-3': last , 'mt-5' : !last}" [src]="mobile.imgSrc">
-                <div class="card-body text-center">
-                    <h6 class="card-title text-center">{{mobile.name}}</h6>
-                    <span class="card-text text-center mb-2">${{mobile.price}}</span>
-                    <input id="{{mobile.name}}" value='1' min="1" class="form-control mb-2">
-                    <button (click)="addToChart(mobile.name,mobile.price,mobile.id)" class="btn btn-primary">Add to chart</button>
-                </div>
+<div class="container" *ngIf="!showModal">
+    <div class="text-right width">
+        <button (click)="showCart();showModal=true" class="btn-primary btn">Cart {{allItemsCount}}</button>
+    </div>
+    <div *ngFor="let mobile of mobileData" style="float:left">
+        <div class="card m-3">
+            <img class="card-img-top " [src]="mobile.imgSrc">
+            <div class="card-body text-center">
+                <h6 class="card-title text-center">{{mobile.name}}</h6>
+                <span class="card-text text-center mb-2">${{mobile.price}}</span>
+                <input id="{{mobile.name}}" value='1' min="1" class="form-control mb-2">
+                <button (click)="addToChart(mobile.name,mobile.price,mobile.id)" class="btn btn-primary">Add to chart</button>
             </div>
         </div>
+    </div>
 </div>
 
 <app-modal (messageEvent)="receiveMessage($event)" *ngIf="showModal"></app-modal>

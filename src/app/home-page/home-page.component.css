@@ -9,14 +9,19 @@ img{
     box-shadow: 0 25px 35px black;
     cursor: pointer;
 }
-html,
+/* html,
 body {
     height: 100%;
-}
+} */
 .container {
     height: 100%;
-    display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 5rem;
+}
+.width{
+    width: 85%;
+}
+.width  button{
+    width: 10%;
 }

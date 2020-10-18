@@ -14,12 +14,12 @@ export class ModalComponent implements OnInit {
   allItemsCount:number = 0;
   ngOnInit() {
     this.cartData = this.selectedItemsService.getSelectedItems();
+   
     this.cartData.forEach(element => {
       this.totalCost += parseInt(element.price, 10);
     });
   }
-  message: string = "Close dialog !"
-
+  message: string = "Close dialog !";
   sendMessage() {
     this.messageEvent.emit(this.message)
   }
