@@ -15,6 +15,14 @@ export class HomePageComponent implements OnInit {
   showModal =false;
   cartData: Array<{id:null,name: string, price: number,number:0}> = []; 
   ngOnInit() {
+    if(localStorage.getItem('data') != null){
+      let localStorageData = localStorage.getItem('data');
+      localStorageData = JSON.parse(localStorageData)
+      localStorageData.forEach(element => {
+        this.allItemsCount += parseInt(element.numberOfMobiles, 10);
+      });
+    }
+
     this.mobileData = this.mobileService.getMobileData();
   }
   addToChart(name,price,id){
@@ -22,6 +30,7 @@ export class HomePageComponent implements OnInit {
     numberOfMobiles = parseInt(numberOfMobiles, 10);
     this.allItemsCount += numberOfMobiles; 
     this.cartData.push({id,name,price,numberOfMobiles});
+    localStorage.setItem('data',JSON.stringify(this.cartData));  
   }
   showCart(){
     this.showModal= true;

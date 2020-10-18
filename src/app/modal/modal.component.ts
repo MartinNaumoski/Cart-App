@@ -13,8 +13,9 @@ export class ModalComponent implements OnInit {
   totalCost:number=0;
   allItemsCount:number = 0;
   ngOnInit() {
+    let localStorageData = localStorage.getItem('data');
     this.cartData = this.selectedItemsService.getSelectedItems();
-   
+    this.cartData = [ ... this.cartData, ...JSON.parse(localStorageData)];
     this.cartData.forEach(element => {
       this.totalCost += parseInt(element.price, 10);
     });
@@ -26,6 +27,7 @@ export class ModalComponent implements OnInit {
   removeItem(item){ 
     this.selectedItemsService.removeItem(this.cartData.filter(obj => obj !== item));
     this.cartData = this.selectedItemsService.getSelectedItems();
+    localStorage.setItem('data',JSON.stringify(this.cartData));  
     this.allItemsCount -= 1;
     this.totalCost -= item.price;
   }
